@@ -1,3 +1,6 @@
+// Learning exercise; with a lot of cribbing from
+// https://github.com/craftedpixelz/Craftyslide
+
 ;(function($){
 
   $.fn.slideshow = function( options ){
@@ -6,9 +9,9 @@
     var opts = $.extend($.fn.slideshow.defaultOptions, options );
 
     // Set variables
-    var $this = $(this);
-    var items = $this.children('li');
-    var numItems = $this.children('li').length;
+    // var $this = $(this);
+    var items = this.children('li');
+    var numItems = this.children('li').length;
 
     // Set size of slideshow
     this.width(opts.width); 
@@ -43,49 +46,64 @@
     var next = $('<a href="#' + k + '" id="next">Next</a>');
     var prev = $('<a href="#' + j + '" id="prev">Previous</a>');
 
-    this.append(next);
+
     this.append(prev);
+    this.append(next);
 
-    // Add left/right click buttons
+    // Pagination navigation
+    function paginationNav(){
+      var pagi = $("#pagination li a");
+      var next = $("#next");
+      var prev = $("#prev");
 
-    // // Scream?!?!?
-    // for(var i=0; i<items.length; i++){
-    //   $(items[i]).css({"border-width":"3px",
-    //                   "border-color": opts.color,
-    //                   "border-style":"solid"});
-    // }
+      pagi.on("click", function(e){
+        e.preventDefault();
 
-    // this.on("click", function(){
-    //   $this.animate({
-    //     opacity: 0
-    //     // height: "toggle"
-    //     }, 500, "swing");
+        var active = this.hash;
+        items.fadeOut();
+        $(active).fadeIn();
 
-    //   console.log("Clicked the thing");
-    // });
+        active = parseInt(active.replace(/\D/g,''));
+        console.log(active);
 
-    function NextPrevious(){
+        j = active - 1;
+        if (j < 1){
+          j = numItems;
+        }
+        k = active + 1;
+        console.log(k);
+        if (k > numItems){
+          k = 1;
+        }
+        console.log(k);
+
+        next.attr("href","#"+k);
+        prev.attr("href","#"+j);
+
+
+      });
+
+    }
+
+    // Next/previous navigation 
+    function nextPreviousNav(){
       var next = $("#next");
       var prev = $("#prev");
 
       next.on("click",function(e){
         e.preventDefault();
-        console.log("Clicked on the next");
-        console.log(this.hash);
         var active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
-        console.log(k);
+        // Reset the links
         k++;
         j++;
-        console.log(k);
         if (k > numItems){
           k = 1;
         }
         if (j > numItems){
           j = 1;
         }
-        // var newNext = $('<a href="#"'+ k +' id="next">Next</a>');
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
 
@@ -93,22 +111,18 @@
 
       prev.on("click",function(e){
         e.preventDefault();
-        console.log("Clicked on the next");
-        console.log(this.hash);
         var active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
-        console.log(k);
+        // Reset the links
         k--;
         j--;
-        console.log(k);
         if (k < 1){
           k = numItems;
         }
         if (j < 1){
           j = numItems;
         }
-        // var newNext = $('<a href="#"'+ k +' id="next">Next</a>');
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
 
@@ -119,7 +133,8 @@
 
 
 
-    NextPrevious();
+    nextPreviousNav();
+    paginationNav();
     count (this.children('li'));
 
     return this;
@@ -135,7 +150,6 @@
 
   // Default options
   $.fn.slideshow.defaultOptions = {
-    color: "#000",
     width: "600px",
     height: 300,
     interval: 4000
