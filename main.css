@@ -6,7 +6,53 @@ body, ul, li {
 	padding: 0;
 	margin: 0;
 }
+#slideshow {
+	font-family: sans-serif;
+	position: relative;
+}
 
-img {
-	/*max-width: 400px;*/
+#pagination {
+	font-family: sans-serif;
+	list-style-type: none;
+	position: absolute;
+	bottom: 5px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#pagination li {
+	float: left;
+	display: inline;
+	padding: 0 8px 0 0;
+
+}
+
+#pagination li a {
+	text-decoration: none;
+	font-weight: 700;
+	color: #fff;
+
+}
+
+#pagination li .active {
+	color: #fff;
+}
+
+#next,
+#prev {
+	color: #fff;
+	text-decoration: none;
+	size: 10em;
+}
+
+#next {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+}
+
+#prev {
+	position: absolute;
+	left: 10px;
+	top: 50%;
 }

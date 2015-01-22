@@ -17,7 +17,7 @@
     this.width(opts.width); 
     this.height(opts.height);
     this.find('li, li img').css("maxWidth" , opts.width);
-    this.find('li, li img').css("maxHeight" , opts.height);
+    // this.find('li, li img').css("maxHeight" , opts.height);
 
     // Amend css
     this.css({"listStyleType" :"none", "overflow":"hidden"});
@@ -28,7 +28,6 @@
     items.not(":first").hide();
 
     // Add IDs to each of the images
-    // Paginate
 
     var pagination = $('<ul id="pagination">');
     this.append(pagination);
@@ -41,10 +40,11 @@
       i++;
     });
 
+    // Set up next/previous links
     var k = 2;
     var j = numItems;
-    var next = $('<a href="#' + k + '" id="next">Next</a>');
-    var prev = $('<a href="#' + j + '" id="prev">Previous</a>');
+    var next = $('<a href="#' + k + '" id="next">▶</a>');
+    var prev = $('<a href="#' + j + '" id="prev">◀</a>');
 
 
     this.append(prev);
@@ -65,6 +65,8 @@
 
         active = parseInt(active.replace(/\D/g,''));
         console.log(active);
+
+        // Fixed the next/previous links
 
         j = active - 1;
         if (j < 1){
