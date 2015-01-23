@@ -1,3 +1,5 @@
 $(document).on('ready', function() {
-  $("#slideshow").slideshow();
+  $("#slideshow").slideshow({"width": "100%"});
+
+
 });

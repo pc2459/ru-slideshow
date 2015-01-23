@@ -9,7 +9,6 @@
     var opts = $.extend($.fn.slideshow.defaultOptions, options );
 
     // Set variables
-    // var this = $(this);
     var items = this.children('li');
     var numItems = this.children('li').length;
 
@@ -27,12 +26,10 @@
     items.not(":first").hide();
 
     // Add IDs to each of the images
-
     var pagination = $('<ul id="pagination">');
     this.append(pagination);
 
     var i = 1;
-    
     items.each(function(){
       $(this).attr("id",i);
       pagination.append('<li><a href="#' + i + '">' + i + '</a>');
@@ -70,21 +67,16 @@
         active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
-
-        var setActive = parseInt(active.replace(/\D/g,''));
-        console.log("Pagination set active to: " + setActive);
-
+ 
         // Fix the next/previous links
+        var setActive = parseInt(active.replace(/\D/g,''));
         j = setActive - 1;
         if (j < 1){ j = numItems; }
         k = setActive + 1;
         if (k > numItems){ k = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
-
-
       });
-
     }
 
     // Next/previous navigation 
@@ -104,7 +96,6 @@
         if (j > numItems){ j = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
-
       });
 
       prev.on("click",function(e){
@@ -123,7 +114,6 @@
         }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
-
       });
     }
 
@@ -131,21 +121,15 @@
     function autoplay(){
       $("#autoplay").text('❚❚');
       interval = setInterval(function(){
-        console.log("Time has passed");
-        console.log("Autoplay active is: " + active);
 
         var nextSlide = parseInt(active.replace(/\D/g,'')) + 1;
-        if(nextSlide>numItems){
-          nextSlide = 1;
-        }
+        if(nextSlide>numItems){ nextSlide = 1; }
         active = "#" + nextSlide;
-        console.log("New active is: " + active); 
 
         items.fadeOut();
         $(active).fadeIn();
         
         // Fix the next/previous links
-
         j = nextSlide - 1;
         if (j < 1){ j = numItems; }
         k = nextSlide + 1;
@@ -155,8 +139,6 @@
         prev.attr("href","#"+j);
 
         autoplayMode = "on";
-        
-
       }, opts.interval);
     }
 
@@ -167,9 +149,6 @@
       
     }
 
-
-
-
     nextPreviousNav();
     paginationNav();
 
@@ -177,9 +156,7 @@
       $("#autoplay").text("❚❚");
       autoplay();
     }
-    else{
-      $("#autoplay").text("▶");
-    }
+    else{ $("#autoplay").text("▶"); }
 
     $("#autoplay").on("click",function(){
       if(autoplayMode == "off"){
@@ -197,12 +174,6 @@
 
   };
 
-
-
-  // Private function
-  function count(n){
-    console.log(n.length);
-  }
 
   // Default options
   $.fn.slideshow.defaultOptions = {
