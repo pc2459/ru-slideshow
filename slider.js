@@ -71,19 +71,14 @@
         items.fadeOut();
         $(active).fadeIn();
 
-        active = parseInt(active.replace(/\D/g,''));
-        console.log(active);
+        var setActive = parseInt(active.replace(/\D/g,''));
+        console.log("Pagination set active to: " + setActive);
 
         // Fix the next/previous links
-        j = active - 1;
-        if (j < 1){
-          j = numItems;
-        }
-        k = active + 1;
-        if (k > numItems){
-          k = 1;
-        }
-
+        j = setActive - 1;
+        if (j < 1){ j = numItems; }
+        k = setActive + 1;
+        if (k > numItems){ k = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
 
@@ -105,12 +100,8 @@
         // Reset the links
         k++;
         j++;
-        if (k > numItems){
-          k = 1;
-        }
-        if (j > numItems){
-          j = 1;
-        }
+        if (k > numItems){ k = 1; }
+        if (j > numItems){ j = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
 
@@ -141,13 +132,14 @@
       $("#autoplay").text('❚❚');
       interval = setInterval(function(){
         console.log("Time has passed");
+        console.log("Autoplay active is: " + active);
 
         var nextSlide = parseInt(active.replace(/\D/g,'')) + 1;
         if(nextSlide>numItems){
           nextSlide = 1;
         }
         active = "#" + nextSlide;
-        console.log(active); 
+        console.log("New active is: " + active); 
 
         items.fadeOut();
         $(active).fadeIn();
@@ -155,13 +147,9 @@
         // Fix the next/previous links
 
         j = nextSlide - 1;
-        if (j < 1){
-          j = numItems;
-        }
+        if (j < 1){ j = numItems; }
         k = nextSlide + 1;
-        if (k > numItems){
-          k = 1;
-        }
+        if (k > numItems){ k = 1; }
 
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
@@ -205,7 +193,6 @@
     });
 
     
-
     return this;
 
   };
