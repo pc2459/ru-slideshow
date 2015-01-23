@@ -56,3 +56,11 @@ body, ul, li {
 	left: 10px;
 	top: 50%;
 }
+
+#autoplay{
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: #fff;
+	text-decoration: none;
+}

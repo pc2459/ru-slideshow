@@ -9,7 +9,7 @@
     var opts = $.extend($.fn.slideshow.defaultOptions, options );
 
     // Set variables
-    // var $this = $(this);
+    // var this = $(this);
     var items = this.children('li');
     var numItems = this.children('li').length;
 
@@ -21,7 +21,6 @@
 
     // Amend css
     this.css({"listStyleType" :"none", "overflow":"hidden"});
-    
     this.children().css("float","left");
 
     // Hide everything but the first image
@@ -50,6 +49,15 @@
     this.append(prev);
     this.append(next);
 
+    var active = "#1";
+
+    // Autoplay variables
+    var interval = null;
+    var autoplayMode = opts.autoplay;
+    var autoplayButton = $('<a href="#" id="autoplay"></a>');
+    this.append(autoplayButton);
+
+
     // Pagination navigation
     function paginationNav(){
       var pagi = $("#pagination li a");
@@ -59,25 +67,22 @@
       pagi.on("click", function(e){
         e.preventDefault();
 
-        var active = this.hash;
+        active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
 
         active = parseInt(active.replace(/\D/g,''));
         console.log(active);
 
-        // Fixed the next/previous links
-
+        // Fix the next/previous links
         j = active - 1;
         if (j < 1){
           j = numItems;
         }
         k = active + 1;
-        console.log(k);
         if (k > numItems){
           k = 1;
         }
-        console.log(k);
 
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
@@ -94,7 +99,7 @@
 
       next.on("click",function(e){
         e.preventDefault();
-        var active = this.hash;
+        active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
         // Reset the links
@@ -113,7 +118,7 @@
 
       prev.on("click",function(e){
         e.preventDefault();
-        var active = this.hash;
+        active = this.hash;
         items.fadeOut();
         $(active).fadeIn();
         // Reset the links
@@ -131,13 +136,75 @@
       });
     }
 
+    // Autoplay
+    function autoplay(){
+      $("#autoplay").text('❚❚');
+      interval = setInterval(function(){
+        console.log("Time has passed");
+
+        var nextSlide = parseInt(active.replace(/\D/g,'')) + 1;
+        if(nextSlide>numItems){
+          nextSlide = 1;
+        }
+        active = "#" + nextSlide;
+        console.log(active); 
+
+        items.fadeOut();
+        $(active).fadeIn();
+        
+        // Fix the next/previous links
+
+        j = nextSlide - 1;
+        if (j < 1){
+          j = numItems;
+        }
+        k = nextSlide + 1;
+        if (k > numItems){
+          k = 1;
+        }
+
+        next.attr("href","#"+k);
+        prev.attr("href","#"+j);
+
+        autoplayMode = "on";
+        
+
+      }, opts.interval);
+    }
+
+    function pauseAutoplay() {
+      $("#autoplay").text('▶');
+      clearInterval(interval);
+      autoplayMode = "off";
+      
+    }
 
 
 
 
     nextPreviousNav();
     paginationNav();
-    count (this.children('li'));
+
+    if(autoplayMode == "on"){
+      $("#autoplay").text("❚❚");
+      autoplay();
+    }
+    else{
+      $("#autoplay").text("▶");
+    }
+
+    $("#autoplay").on("click",function(){
+      if(autoplayMode == "off"){
+        autoplay();
+        console.log("Turned on");
+      }
+      else{
+        pauseAutoplay();
+        console.log("turned off");
+      }
+    });
+
+    
 
     return this;
 
@@ -152,9 +219,10 @@
 
   // Default options
   $.fn.slideshow.defaultOptions = {
-    width: "600px",
+    width: 600,
     height: 300,
-    interval: 4000
+    interval: 4000,
+    autoplay: "on",
   };
 
 })(jQuery);
