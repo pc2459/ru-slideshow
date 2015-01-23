@@ -9,8 +9,8 @@
     var opts = $.extend($.fn.slideshow.defaultOptions, options );
 
     // Set variables
-    var items = this.children('li');
-    var numItems = this.children('li').length;
+    var items = this.find('li');
+    var numItems = this.find('li').length;
 
     // Set size of slideshow
     this.width(opts.width); 
@@ -24,6 +24,11 @@
 
     // Hide everything but the first image
     items.not(":first").hide();
+
+    // Captions
+    var captionsOn = opts.captions;
+    var captionBox = $('<div class="slideshow-caption"></div>');
+    this.append(captionBox);
 
     // Add IDs to each of the images
     var pagination = $('<ul id="pagination">');
@@ -55,6 +60,9 @@
     this.append(autoplayButton);
 
 
+
+
+
     // Pagination navigation
     function paginationNav(){
       var pagi = $("#pagination li a");
@@ -76,6 +84,10 @@
         if (k > numItems){ k = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
+
+        if (captionsOn === "on"){
+          captions();
+        }
       });
     }
 
@@ -96,6 +108,10 @@
         if (j > numItems){ j = 1; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
+
+        if (captionsOn === "on"){
+          captions();
+        }
       });
 
       prev.on("click",function(e){
@@ -106,14 +122,14 @@
         // Reset the links
         k--;
         j--;
-        if (k < 1){
-          k = numItems;
-        }
-        if (j < 1){
-          j = numItems;
-        }
+        if (k < 1){ k = numItems; }
+        if (j < 1){ j = numItems; }
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
+
+        if (captionsOn === "on"){
+          captions();
+        }
       });
     }
 
@@ -125,7 +141,6 @@
         var nextSlide = parseInt(active.replace(/\D/g,'')) + 1;
         if(nextSlide>numItems){ nextSlide = 1; }
         active = "#" + nextSlide;
-
         items.fadeOut();
         $(active).fadeIn();
         
@@ -134,9 +149,12 @@
         if (j < 1){ j = numItems; }
         k = nextSlide + 1;
         if (k > numItems){ k = 1; }
-
         next.attr("href","#"+k);
         prev.attr("href","#"+j);
+
+        if (captionsOn === "on"){
+          captions();
+        }
 
         autoplayMode = "on";
       }, opts.interval);
@@ -146,11 +164,27 @@
       $("#autoplay").text('▶');
       clearInterval(interval);
       autoplayMode = "off";
+    }
+
+    function captions(){
+      console.log($(active).find('img'));
+      console.log($(active).find('img').attr("title"));
+      var currentCaption = $(active).find('img').attr("title");
+      if (currentCaption != undefined){
+        captionBox.show();
+        captionBox.text(currentCaption);  
+      }
+      else{
+        captionBox.hide();
+      }
       
+
+
     }
 
     nextPreviousNav();
     paginationNav();
+    captions();
 
     if(autoplayMode == "on"){
       $("#autoplay").text("❚❚");
@@ -168,10 +202,8 @@
         console.log("turned off");
       }
     });
-
-    
+   
     return this;
-
   };
 
 
@@ -181,6 +213,7 @@
     height: 300,
     interval: 4000,
     autoplay: "on",
+    captions: "on"
   };
 
 })(jQuery);
